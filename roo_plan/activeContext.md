@@ -41,4 +41,5 @@ De primaire focus ligt op Fase 1: Kernfunctionaliteit, met specifieke aandacht v
 - ✅ Next.js frontend project geïnitialiseerd
 - ✅ Button en TaskCard componenten geïmplementeerd
 - ✅ KanbanColumn component voltooid
-- 🔄 Focus verschuift naar KanbanBoard container implementatie
+- ✅ KanbanBoard container geïmplementeerd
+- 🔄 Focus verschuift naar notificatiesysteem implementatie

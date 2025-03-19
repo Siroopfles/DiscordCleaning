@@ -23,10 +23,10 @@
 
 ## Fase 2: Essentiële Features (Maanden 4-6)
 - [PLAN] Notificatiesysteem implementeren
-- [WIP-B] Samenwerkingsborden ontwikkelen
+- [DONE] Samenwerkingsborden ontwikkelen
   * [DONE] TaskCard component
   * [DONE] KanbanColumn component
-  * [PLAN] KanbanBoard container
+  * [DONE] KanbanBoard container
 - [PLAN] Virtuele valuta systeem integreren
 - [PLAN] Gebruikersinstellingen toevoegen
 

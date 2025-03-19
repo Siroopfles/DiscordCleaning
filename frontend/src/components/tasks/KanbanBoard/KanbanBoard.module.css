@@ -1,0 +1,23 @@
+.board {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+  min-height: calc(100vh - 64px); /* Assumes 64px header */
+  overflow-x: auto;
+  width: 100%;
+}
+
+/* Responsive styling */
+@media (max-width: 768px) {
+  .board {
+    padding: 0.5rem;
+    gap: 0.5rem;
+  }
+}
+
+/* Smooth scrolling on mobile */
+@media (hover: none) {
+  .board {
+    -webkit-overflow-scrolling: touch;
+  }
+}
