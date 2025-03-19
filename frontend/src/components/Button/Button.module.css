@@ -1,0 +1,94 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-family-base);
+  font-weight: 500;
+  border-radius: var(--border-radius-base);
+  transition: var(--transition-base);
+  cursor: pointer;
+  border: none;
+}
+
+/* Variants */
+.primary {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.primary:hover {
+  filter: brightness(90%);
+}
+
+.secondary {
+  background-color: var(--secondary-color);
+  color: white;
+}
+
+.secondary:hover {
+  filter: brightness(90%);
+}
+
+.success {
+  background-color: var(--success-color);
+  color: white;
+}
+
+.success:hover {
+  filter: brightness(90%);
+}
+
+.danger {
+  background-color: var(--danger-color);
+  color: white;
+}
+
+.danger:hover {
+  filter: brightness(90%);
+}
+
+.warning {
+  background-color: var(--warning-color);
+  color: var(--dark-color);
+}
+
+.warning:hover {
+  filter: brightness(90%);
+}
+
+.info {
+  background-color: var(--info-color);
+  color: white;
+}
+
+.info:hover {
+  filter: brightness(90%);
+}
+
+/* Sizes */
+.sm {
+  padding: var(--spacing-1) var(--spacing-2);
+  font-size: var(--font-size-sm);
+}
+
+.md {
+  padding: var(--spacing-2) var(--spacing-4);
+  font-size: var(--font-size-base);
+}
+
+.lg {
+  padding: var(--spacing-3) var(--spacing-6);
+  font-size: var(--font-size-lg);
+}
+
+/* Width */
+.fullWidth {
+  width: 100%;
+}
+
+/* Disabled state */
+.button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  filter: grayscale(20%);
+}

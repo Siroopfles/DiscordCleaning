@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1742389171079" clover="3.2.0">
+  <project timestamp="1742389171079" name="All files">
+    <metrics statements="16" coveredstatements="14" conditionals="2" coveredconditionals="2" methods="3" coveredmethods="2" elements="21" coveredelements="18" complexity="0" loc="16" ncloc="16" packages="1" files="1" classes="1"/>
+    <file name="server.ts" path="D:\Desktop\Projecten\NewBoom\backend\src\server.ts">
+      <metrics statements="16" coveredstatements="14" conditionals="2" coveredconditionals="2" methods="3" coveredmethods="2"/>
+      <line num="1" count="1" type="stmt"/>
+      <line num="2" count="1" type="stmt"/>
+      <line num="3" count="1" type="stmt"/>
+      <line num="6" count="1" type="stmt"/>
+      <line num="8" count="1" type="stmt"/>
+      <line num="11" count="1" type="stmt"/>
+      <line num="12" count="1" type="stmt"/>
+      <line num="15" count="1" type="stmt"/>
+      <line num="16" count="1" type="stmt"/>
+      <line num="20" count="1" type="stmt"/>
+      <line num="21" count="0" type="stmt"/>
+      <line num="22" count="0" type="stmt"/>
+      <line num="25" count="1" type="cond" truecount="2" falsecount="0"/>
+      <line num="27" count="1" type="stmt"/>
+      <line num="28" count="1" type="stmt"/>
+      <line num="31" count="1" type="stmt"/>
+    </file>
+  </project>
+</coverage>
