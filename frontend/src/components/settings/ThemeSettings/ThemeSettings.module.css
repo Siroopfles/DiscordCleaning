@@ -1,0 +1,83 @@
+.container {
+  padding: 1.5rem;
+  background-color: var(--background-primary);
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+}
+
+.heading {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 1.5rem 0;
+}
+
+.colorSection {
+  margin: 1.5rem 0;
+  padding: 1rem;
+  background-color: var(--background-secondary);
+  border-radius: 0.5rem;
+}
+
+.subheading {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin: 0 0 1rem 0;
+}
+
+.colorGrid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.75rem;
+  justify-items: center;
+}
+
+.colorButton {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  padding: 0;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.colorButton:hover {
+  transform: scale(1.1);
+}
+
+.colorButton.selected {
+  border-color: var(--text-primary);
+  transform: scale(1.1);
+}
+
+.colorButton:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+@media (max-width: 640px) {
+  .container {
+    padding: 1rem;
+  }
+
+  .heading {
+    font-size: 1.125rem;
+    margin-bottom: 1rem;
+  }
+
+  .colorSection {
+    margin: 1rem 0;
+    padding: 0.75rem;
+  }
+
+  .colorGrid {
+    gap: 0.5rem;
+  }
+
+  .colorButton {
+    width: 2rem;
+    height: 2rem;
+  }
+}

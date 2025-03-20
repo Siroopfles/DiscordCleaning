@@ -1,0 +1,86 @@
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  background-color: var(--background-secondary);
+  margin-bottom: 0.5rem;
+  transition: background-color 0.2s ease;
+}
+
+.container:hover {
+  background-color: var(--background-hover);
+}
+
+.textContent {
+  flex: 1;
+  margin-right: 1rem;
+}
+
+.label {
+  display: block;
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: 0.25rem;
+}
+
+.description {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.select {
+  min-width: 120px;
+  padding: 0.5rem 2rem 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: var(--text-primary);
+  background-color: var(--background-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 0.375rem;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.5rem center;
+  background-size: 1rem;
+}
+
+.select:focus {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+  border-color: var(--primary);
+}
+
+.select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background-color: var(--background-disabled);
+}
+
+.select option {
+  color: var(--text-primary);
+  background-color: var(--background-primary);
+}
+
+@media (max-width: 640px) {
+  .container {
+    padding: 0.75rem;
+  }
+  
+  .label {
+    font-size: 0.9375rem;
+  }
+  
+  .description {
+    font-size: 0.8125rem;
+  }
+  
+  .select {
+    min-width: 100px;
+    font-size: 0.8125rem;
+    padding: 0.375rem 1.75rem 0.375rem 0.625rem;
+  }
+}

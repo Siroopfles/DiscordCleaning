@@ -5,7 +5,9 @@ import mongoose from 'mongoose';
 import taskRoutes from './routes/task.routes';
 import notificationRoutes from './routes/notification.routes';
 import currencyRoutes from './routes/currency.routes';
+import userRoutes from './routes/user.routes';
 import notificationService from './services/notification.service';
+import { UserSettingsError } from './services/user.service';
 import { ApiError } from './utils/ApiError';
 
 // Load environment variables
@@ -32,6 +34,7 @@ app.get('/health', (_req, res) => {
 app.use('/api/tasks', taskRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/currency', currencyRoutes);
+app.use('/api/users', userRoutes);
 
 // Error handling middleware
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
@@ -61,6 +64,15 @@ app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
     });
   }
 
+  if (err instanceof UserSettingsError) {
+    return res.status(400).json({
+      error: {
+        message: err.message,
+        type: 'UserSettingsError'
+      }
+    });
+  }
+
   res.status(500).json({
     error: {
       message: 'Internal Server Error',
@@ -71,11 +83,8 @@ app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
 
 const PORT = process.env.PORT || 3000;
 
-// Initialize notification service
-notificationService
-  .initialize()
-  .then(() => console.log('Notification service initialized'))
-  .catch((err) => console.error('Failed to initialize notification service:', err));
+// Note: NotificationService wordt geïnitialiseerd in de Discord bot setup
+// Het wordt hier alleen gebruikt voor de routes en error handling
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

@@ -1,0 +1,47 @@
+.container {
+  padding: 1.5rem;
+  background-color: var(--background-primary);
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+}
+
+.heading {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 1.5rem 0;
+}
+
+.settingsGroup {
+  margin-bottom: 1.5rem;
+}
+
+.privacyNote {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  padding: 1rem;
+  background-color: var(--background-secondary);
+  border-radius: 0.5rem;
+  border-left: 3px solid var(--primary);
+  line-height: 1.5;
+}
+
+@media (max-width: 640px) {
+  .container {
+    padding: 1rem;
+  }
+
+  .heading {
+    font-size: 1.125rem;
+    margin-bottom: 1rem;
+  }
+
+  .settingsGroup {
+    margin-bottom: 1rem;
+  }
+
+  .privacyNote {
+    font-size: 0.8125rem;
+    padding: 0.75rem;
+  }
+}

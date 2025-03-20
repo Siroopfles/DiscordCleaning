@@ -19,3 +19,24 @@ export interface ICategory {
   created_at: Date;
   updated_at: Date;
 }
+
+export interface IUserSettings {
+  notifications: {
+    email: boolean;
+    discord: boolean;
+    desktop: boolean;
+    frequency: 'realtime' | 'hourly' | 'daily';
+  };
+  theme: {
+    mode: 'light' | 'dark' | 'system';
+    primaryColor: string;
+    fontSize: 'small' | 'medium' | 'large';
+  };
+  language: 'nl' | 'en';
+  privacy: {
+    showOnline: boolean;
+    showActivity: boolean;
+    shareStats: boolean;
+  };
+  updatedAt: Date;
+}
