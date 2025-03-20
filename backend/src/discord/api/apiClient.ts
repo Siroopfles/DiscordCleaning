@@ -18,6 +18,7 @@ interface TaskUpdate {
   title?: string;
   description?: string;
   status?: 'OPEN' | 'IN_PROGRESS' | 'COMPLETED';
+  assigned_to?: string;
 }
 
 interface Task {

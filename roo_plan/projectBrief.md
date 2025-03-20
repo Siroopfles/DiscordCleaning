@@ -187,7 +187,6 @@ De volgende features worden overwogen voor een later stadium:
 - **Meertalige ondersteuning:** Systeem in meerdere talen.
 - **Offline modus:** Webdashboard werkt offline en synchroniseert later.
 - **Aangepaste geluiden:** Gebruikers kiezen notificatiegeluiden.
-- **Ouderlijke controle:** Taken van kinderen beheren.
 - **Evenementsjablonen:** Vooraf gemaakte takenlijsten voor evenementen.
 - **Publieke API:** API voor externe integraties.
 

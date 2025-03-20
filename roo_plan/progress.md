@@ -14,7 +14,7 @@
 - [DONE] Backend opzetten met Express.js en TypeScript
 - [DONE] MongoDB database configureren en verbinden
 - [DONE] Discord-bot ontwikkelen met Discord.js
-- [WIP] Basiswebdashboard opzetten met Next.js
+- [DONE] Basiswebdashboard opzetten met Next.js
   * [DONE] Next.js project initialisatie
   * [DONE] Button component
   * [DONE] TaskCard component met drag-and-drop
@@ -22,12 +22,22 @@
 - [DONE] Taakbeheer implementeren
 
 ## Fase 2: Essentiële Features (Maanden 4-6)
-- [PLAN] Notificatiesysteem implementeren
+- [DONE] Notificatiesysteem implementeren
 - [DONE] Samenwerkingsborden ontwikkelen
   * [DONE] TaskCard component
   * [DONE] KanbanColumn component
   * [DONE] KanbanBoard container
-- [PLAN] Virtuele valuta systeem integreren
+- [DONE] Virtuele valuta systeem integreren
+  * [DONE] Database schema's en modellen
+  * [DONE] Repository en service layer
+  * [DONE] API routes en authenticatie
+  * [DONE] Discord bot commando's
+  * [DONE] Frontend implementatie
+- [PLAN] Discord bot code migratie
+  * Inventariseer huidige bot functionaliteit
+  * Migreer functionaliteit naar nieuwe structuur
+  * Test en valideer nieuwe implementatie
+  * Verwijder oude code na succesvolle migratie
 - [PLAN] Gebruikersinstellingen toevoegen
 
 ## Fase 3: Geavanceerde Features (Maanden 7-9)
