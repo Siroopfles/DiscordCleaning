@@ -1,0 +1,80 @@
+/* Loading States */
+.skeleton {
+  @apply bg-gray-200 animate-pulse rounded;
+}
+
+.skeletonText {
+  composes: skeleton;
+  @apply h-4 w-3/4;
+}
+
+.skeletonCircle {
+  composes: skeleton;
+  @apply h-12 w-12 rounded-full;
+}
+
+.skeletonRect {
+  composes: skeleton;
+  @apply h-24 w-full;
+}
+
+/* Spinners */
+.spinner {
+  @apply w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full;
+  animation: spin 1s linear infinite;
+}
+
+.spinnerSmall {
+  composes: spinner;
+  @apply w-4 h-4 border-2;
+}
+
+.spinnerLarge {
+  composes: spinner;
+  @apply w-12 h-12 border-6;
+}
+
+/* Progress Indicators */
+.progressBar {
+  @apply h-2 bg-gray-200 rounded-full overflow-hidden;
+}
+
+.progressFill {
+  @apply h-full bg-blue-600 transition-all duration-300 ease-out;
+}
+
+.progressIndeterminate {
+  @apply h-full bg-blue-600;
+  animation: indeterminateProgress 1.5s infinite ease-in-out;
+}
+
+/* Loading Container */
+.loadingContainer {
+  @apply flex items-center justify-center p-4;
+}
+
+.loadingOverlay {
+  @apply fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50;
+}
+
+/* Keyframes */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes indeterminateProgress {
+  0% {
+    transform: translateX(-100%);
+  }
+  50% {
+    transform: translateX(50%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}

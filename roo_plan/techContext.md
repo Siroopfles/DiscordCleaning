@@ -9,6 +9,10 @@
 - TypeScript voor type-veiligheid
 - React voor UI componenten
 - CSS Modules voor styling
+- Tailwind CSS voor utility-first styling
+- Tailwind CSS Animate voor basis animaties
+- Custom animation hooks voor interacties
+- Framer Motion voor geavanceerde animaties
 
 ### Backend
 - Express.js server framework

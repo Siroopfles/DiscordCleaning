@@ -1,0 +1,120 @@
+/* Basic Animation Utilities */
+.fadeIn {
+  opacity: 0;
+  animation: fadeIn 0.3s ease-in forwards;
+}
+
+.fadeOut {
+  opacity: 1;
+  animation: fadeOut 0.3s ease-out forwards;
+}
+
+.slideIn {
+  transform: translateY(20px);
+  opacity: 0;
+  animation: slideIn 0.3s ease-out forwards;
+}
+
+.slideOut {
+  transform: translateY(0);
+  opacity: 1;
+  animation: slideOut 0.3s ease-in forwards;
+}
+
+.pulse {
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.spin {
+  animation: spin 1s linear infinite;
+}
+
+/* Progress Bar Animation */
+.progressBar {
+  background: linear-gradient(90deg, #4338ca 0%, #6366f1 100%);
+  animation: progressBarWidth 2s ease-out forwards;
+}
+
+/* Skeleton Loading Animation */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    #f3f4f6 0%,
+    #e5e7eb 50%,
+    #f3f4f6 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* Micro-interaction States */
+.hover {
+  transition: transform 0.2s ease, shadow 0.2s ease;
+}
+
+.hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.active {
+  transition: transform 0.1s ease;
+}
+
+.active:active {
+  transform: scale(0.98);
+}
+
+/* Keyframe Definitions */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOut {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes progressBarWidth {
+  from { width: 0%; }
+  to { width: 100%; }
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}

@@ -45,10 +45,44 @@
      - [DONE] Delete command met validaties
    * [DONE] Overige commands gemigreerd
    * [DONE] Oude code verwijderd na dat alles gecontroleerd is
-- [PLAN] Gebruikersinstellingen toevoegen
+- [DONE] Gebruikersinstellingen toevoegen
+   * [DONE] Backend implementatie
+     - [DONE] User model uitbreiding met settings schema
+     - [DONE] API endpoints voor settings management
+     - [DONE] Validatie en service layer
+   * [DONE] Frontend implementatie
+     - [DONE] Settings componenten (Toggle, Select, Section)
+     - [DONE] Settings secties (Notifications, Theme, Language, Privacy)
+     - [DONE] Redux state management en API integratie
 
 ## Fase 3: Geavanceerde Features (Maanden 7-9)
-- [PLAN] Gamification-elementen implementeren
+- [WIP] Gamification-elementen implementeren
+    * [DONE] Database schema's voor achievements en leaderboards
+    * [DONE] Achievement systeem core functionaliteit
+      - [DONE] Achievement en Progress repositories
+      - [DONE] Achievement service met CRUD en tracking
+      - [DONE] Event handling systeem
+      - [DONE] Unit tests
+    * [DONE] Points systeem integratie
+      - [DONE] PointsService en Repository implementatie
+      - [DONE] Event handling voor points updates
+      - [DONE] Integratie met Achievement service
+      - [DONE] Complete test coverage
+    * [WIP] Frontend implementatie
+      - [DONE] Component basisstructuur
+      - [DONE] Redux state management
+      - [DONE] API service integratie
+      - [DONE] Real-time updates
+        * [DONE] WebSocket service met Socket.IO
+        * [DONE] Connection management
+        * [DONE] JWT authenticatie
+        * [DONE] Event system foundation
+      - [WIP] UI polish en animaties
+        * [DONE] Basis animatie utilities
+        * [DONE] Loading states en skeletons
+        * [DONE] Progress indicators
+        * [DONE] Achievement unlock animaties
+        * [DONE] Points/rewards effecten
 - [PLAN] Taakgeschiedenis en analyses toevoegen
 - [PLAN] Google Calendar integratie
 - [PLAN] Webhook-ondersteuning
@@ -58,7 +92,8 @@
 - [PLAN] Prestatie-optimalisatie
 - [PLAN] Monitoring en logging
 - [PLAN] Uitgebreide tests
-  * End-to-end testing van alle geïmplementeerde componenten:
+  * End-to-end testing van ALLE (ER MAG NIKS ONTBREKEN) geïmplementeerde componenten. Maak hier eerst een plan voor in markdown. En houd je aan dat plan!
+  geïmplementeerde componenten:
     - Discord bot commands
     - Frontend componenten
     - API endpoints

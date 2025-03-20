@@ -1,0 +1,38 @@
+@keyframes glow {
+  0% {
+    box-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+  }
+  100% {
+    box-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+  }
+}
+
+.achievementGlow {
+  animation: glow 2s infinite;
+}
+
+.pointsOverlay {
+  position: fixed;
+  pointer-events: none;
+  z-index: 50;
+  font-weight: bold;
+  color: #4CAF50;
+  text-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
+}
+
+.achievementCard {
+  transform-origin: center;
+  backface-visibility: hidden;
+  will-change: transform;
+}
+
+.achievementIcon {
+  transition: transform 0.3s ease;
+}
+
+.achievementCard:hover .achievementIcon {
+  transform: scale(1.1) rotate(5deg);
+}

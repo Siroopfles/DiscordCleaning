@@ -1,93 +1,58 @@
-import express, { Request, Response, NextFunction } from 'express';
-import cors from 'cors';
-import dotenv from 'dotenv';
-import mongoose from 'mongoose';
-import taskRoutes from './routes/task.routes';
-import notificationRoutes from './routes/notification.routes';
-import currencyRoutes from './routes/currency.routes';
-import userRoutes from './routes/user.routes';
-import notificationService from './services/notification.service';
-import { UserSettingsError } from './services/user.service';
-import { ApiError } from './utils/ApiError';
+import 'dotenv/config';
+import { app, httpServer, wsService } from './app';
 
-// Load environment variables
-dotenv.config();
+const PORT = process.env.PORT || 3001;
 
-// Connect to MongoDB
-mongoose
-  .connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/household-tasks')
-  .then(() => console.log('Connected to MongoDB'))
-  .catch((err) => console.error('MongoDB connection error:', err));
-
-const app = express();
-
-// Middleware
-app.use(cors());
-app.use(express.json());
-
-// Basic health check route
-app.get('/health', (_req, res) => {
-  res.json({ status: 'ok', timestamp: new Date().toISOString() });
+// Start HTTP server
+const server = httpServer.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`👾 WebSocket server initialized`);
 });
 
-// Routes
-app.use('/api/tasks', taskRoutes);
-app.use('/api/notifications', notificationRoutes);
-app.use('/api/currency', currencyRoutes);
-app.use('/api/users', userRoutes);
+// Handle uncaught exceptions
+process.on('uncaughtException', (error: Error) => {
+  console.error('Uncaught Exception:', error);
+  gracefulShutdown();
+});
 
-// Error handling middleware
-app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-  console.error(err);
+process.on('unhandledRejection', (reason: any, promise: Promise<any>) => {
+  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+  gracefulShutdown();
+});
+
+// Graceful shutdown
+process.on('SIGTERM', () => gracefulShutdown());
+process.on('SIGINT', () => gracefulShutdown());
+
+function gracefulShutdown() {
+  console.log('🔄 Initiating graceful shutdown...');
   
-  if ('statusCode' in err && typeof (err as any).statusCode === 'number') {
-    return res.status((err as any).statusCode).json({
-      error: err.message
+  // Create a shutdown promise
+  const shutdown = new Promise<void>((resolve) => {
+    server.close(() => {
+      console.log('👋 HTTP server closed');
+      resolve();
     });
-  }
-
-  res.status(500).json({
-    error: 'Internal Server Error'
   });
-});
 
-// Error handling middleware
-app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
-  console.error(err);
-  
-  if (err instanceof ApiError) {
-    return res.status(err.statusCode).json({
-      error: {
-        message: err.message,
-        details: err.details
-      }
-    });
-  }
-
-  if (err instanceof UserSettingsError) {
-    return res.status(400).json({
-      error: {
-        message: err.message,
-        type: 'UserSettingsError'
-      }
-    });
-  }
-
-  res.status(500).json({
-    error: {
-      message: 'Internal Server Error',
-      details: process.env.NODE_ENV === 'development' ? err.message : undefined
-    }
+  // Add timeout to force exit if graceful shutdown takes too long
+  const forceExit = new Promise<void>((resolve) => {
+    setTimeout(() => {
+      console.log('⚠️ Forcing exit after timeout');
+      resolve();
+    }, 10000); // 10 seconds timeout
   });
-});
 
-const PORT = process.env.PORT || 3000;
+  // Execute shutdown
+  Promise.race([shutdown, forceExit])
+    .then(() => {
+      console.log('👍 Shutdown complete');
+      process.exit(0);
+    })
+    .catch((error) => {
+      console.error('💥 Error during shutdown:', error);
+      process.exit(1);
+    });
+}
 
-// Note: NotificationService wordt geïnitialiseerd in de Discord bot setup
-// Het wordt hier alleen gebruikt voor de routes en error handling
-
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
-
-export default app;
+export { server };

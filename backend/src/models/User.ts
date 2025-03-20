@@ -1,108 +1,121 @@
-import { Schema, model, Document } from 'mongoose';
-import { IUser } from '../types/models';
+import { Schema, model, Document, Types } from 'mongoose';
 
-export interface UserDocument extends IUser, Document {}
+export interface IUser extends Document {
+  discord_id: string;
+  username: string;
+  points: number;
+  totalPoints: number;
+  // Points history voor tracking en analyses
+  pointsHistory: Array<{
+    amount: number;
+    source: string;
+    timestamp: Date;
+  }>;
+  // Cached achievements data voor snelle queries
+  achievementStats: {
+    total: number;
+    completed: number;
+    lastCompletedAt?: Date;
+  };
+  settings: {
+    notifications: boolean;
+    theme: 'light' | 'dark';
+    language: string;
+    privacy: {
+      showInLeaderboard: boolean;
+      shareActivity: boolean;
+    };
+  };
+  createdAt: Date;
+  updatedAt: Date;
+}
 
-const userSchema = new Schema<UserDocument>({
+const UserSchema = new Schema({
   discord_id: {
     type: String,
     required: true,
-    unique: true,
-    index: true, // Index for faster queries by discord_id
+    unique: true
   },
   username: {
     type: String,
+    required: true
+  },
+  points: {
+    type: Number,
     required: true,
-    trim: true,
+    default: 0,
+    min: 0
+  },
+  totalPoints: {
+    type: Number,
+    required: true,
+    default: 0,
+    min: 0
+  },
+  pointsHistory: [{
+    amount: {
+      type: Number,
+      required: true
+    },
+    source: {
+      type: String,
+      required: true,
+      enum: ['TASK_COMPLETION', 'ACHIEVEMENT_UNLOCK', 'ADMIN_ADJUSTMENT']
+    },
+    timestamp: {
+      type: Date,
+      default: Date.now
+    }
+  }],
+  achievementStats: {
+    total: {
+      type: Number,
+      required: true,
+      default: 0
+    },
+    completed: {
+      type: Number,
+      required: true,
+      default: 0
+    },
+    lastCompletedAt: {
+      type: Date
+    }
   },
   settings: {
     notifications: {
-      discord: {
-        type: Boolean,
-        default: true,
-      },
-      email: {
-        type: Boolean,
-        default: false,
-      },
-      pushNotifications: {
-        type: Boolean,
-        default: false,
-      },
-      notificationTypes: {
-        taskAssigned: {
-          type: Boolean,
-          default: true,
-        },
-        taskCompleted: {
-          type: Boolean,
-          default: true,
-        },
-        taskDue: {
-          type: Boolean,
-          default: true,
-        },
-        pointsEarned: {
-          type: Boolean,
-          default: true,
-        },
-      },
+      type: Boolean,
+      default: true
     },
     theme: {
       type: String,
-      default: 'light',
       enum: ['light', 'dark'],
+      default: 'light'
     },
     language: {
       type: String,
-      default: 'nl',
-      enum: ['nl', 'en'],
+      default: 'nl'
     },
-    taskManagement: {
-      defaultView: {
-        type: String,
-        default: 'list',
-        enum: ['list', 'kanban'],
-      },
-      defaultCategory: {
-        type: String,
-        required: false,
-      },
-      showCompletedTasks: {
+    privacy: {
+      showInLeaderboard: {
         type: Boolean,
-        default: true,
+        default: true
       },
-      taskSortOrder: {
-        type: String,
-        default: 'dueDate',
-        enum: ['dueDate', 'priority', 'createdAt'],
-      },
-    },
-    gamification: {
-      showLeaderboard: {
+      shareActivity: {
         type: Boolean,
-        default: true,
-      },
-      showPointsHistory: {
-        type: Boolean,
-        default: true,
-      },
-      showAchievements: {
-        type: Boolean,
-        default: true,
-      },
-      notifyOnRewards: {
-        type: Boolean,
-        default: true,
-      },
-    },
-  },
+        default: true
+      }
+    }
+  }
 }, {
-  timestamps: true, // Adds createdAt and updatedAt fields
-  versionKey: false, // Disable the version key (__v)
+  timestamps: true,
+  collection: 'users'
 });
 
-// Create indexes for common queries
-userSchema.index({ username: 1 });
+// Indexen voor snelle queries
+UserSchema.index({ discord_id: 1 }, { unique: true });
+UserSchema.index({ points: -1 });
+UserSchema.index({ 'achievementStats.completed': -1 });
+UserSchema.index({ 'settings.privacy.showInLeaderboard': 1 });
 
-export const User = model<UserDocument>('User', userSchema);
+export const User = model<IUser>('User', UserSchema);

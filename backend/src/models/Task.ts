@@ -1,63 +1,119 @@
-import { Schema, model, Document } from 'mongoose';
-import { ITask } from '../types/models';
+import { Schema, model, Document, Types } from 'mongoose';
 
-export interface TaskDocument extends ITask, Document {}
+export interface ITask extends Document {
+  title: string;
+  description?: string;
+  category: string;
+  priority: 'LOW' | 'MEDIUM' | 'HIGH';
+  status: 'TODO' | 'IN_PROGRESS' | 'COMPLETED' | 'CANCELLED';
+  assignedTo: Types.ObjectId;
+  dueDate?: Date;
+  completedAt?: Date;
+  // Gamification uitbreidingen
+  rewards: {
+    basePoints: number;
+    bonusPoints?: {
+      amount: number;
+      condition: string;
+    };
+    streakMultiplier: number;
+  };
+  completionStreak: number;
+  lastCompletedInStreak?: Date;
+  createdAt: Date;
+  updatedAt: Date;
+}
 
-const taskSchema = new Schema<TaskDocument>({
+const TaskSchema = new Schema({
   title: {
     type: String,
     required: true,
     trim: true,
-    maxlength: 100,
+    maxlength: 100
   },
   description: {
     type: String,
     trim: true,
-    maxlength: 1000,
+    maxlength: 500
   },
   category: {
     type: String,
     required: true,
-    ref: 'Category', // Reference to Category model
-    index: true, // Index for faster category-based queries
+    ref: 'Category'
   },
   priority: {
     type: String,
     required: true,
-    enum: ['low', 'medium', 'high'],
-    default: 'medium',
-    index: true, // Index for priority-based filtering
+    enum: ['LOW', 'MEDIUM', 'HIGH'],
+    default: 'MEDIUM'
   },
   status: {
     type: String,
     required: true,
-    enum: ['todo', 'in_progress', 'completed'],
-    default: 'todo',
-    index: true, // Index for status-based filtering
+    enum: ['TODO', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED'],
+    default: 'TODO'
   },
-  created_by: {
-    type: String,
-    required: true,
+  assignedTo: {
+    type: Schema.Types.ObjectId,
     ref: 'User',
-    index: true, // Index for user-based queries
+    required: true
   },
-  assigned_to: {
-    type: String,
-    ref: 'User',
-    index: true, // Index for assignment-based queries
+  dueDate: {
+    type: Date
   },
-  due_date: {
-    type: Date,
-    index: true, // Index for due date queries and sorting
+  completedAt: {
+    type: Date
   },
+  rewards: {
+    basePoints: {
+      type: Number,
+      required: true,
+      default: 10,
+      min: 0
+    },
+    bonusPoints: {
+      amount: {
+        type: Number,
+        min: 0
+      },
+      condition: {
+        type: String,
+        enum: ['EARLY_COMPLETION', 'STREAK_MILESTONE', 'SPECIAL_EVENT']
+      }
+    },
+    streakMultiplier: {
+      type: Number,
+      required: true,
+      default: 1,
+      min: 1,
+      max: 5
+    }
+  },
+  completionStreak: {
+    type: Number,
+    default: 0,
+    min: 0
+  },
+  lastCompletedInStreak: {
+    type: Date
+  }
 }, {
-  timestamps: true, // Adds createdAt and updatedAt fields
-  versionKey: false, // Disable the version key (__v)
+  timestamps: true,
+  collection: 'tasks'
 });
 
-// Compound indexes for common query patterns
-taskSchema.index({ status: 1, priority: 1 }); // For filtered views
-taskSchema.index({ created_by: 1, due_date: 1 }); // For user's upcoming tasks
-taskSchema.index({ assigned_to: 1, status: 1 }); // For user's assigned tasks
+// Indexen voor snelle queries
+TaskSchema.index({ assignedTo: 1, status: 1 });
+TaskSchema.index({ category: 1 });
+TaskSchema.index({ dueDate: 1 }, { sparse: true });
+TaskSchema.index({ completedAt: -1 }, { sparse: true });
+TaskSchema.index({ completionStreak: -1 });
 
-export const Task = model<TaskDocument>('Task', taskSchema);
+// Samengestelde index voor streak queries
+TaskSchema.index({ 
+  assignedTo: 1, 
+  status: 1, 
+  completionStreak: -1 
+});
+
+export const Task = model<ITask>('Task', TaskSchema);
