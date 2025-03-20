@@ -44,7 +44,7 @@
      - [DONE] Update command voor naam/kleur
      - [DONE] Delete command met validaties
    * [DONE] Overige commands gemigreerd
-   * [PLAN] Oude code verwijderd na dat alles gecontroleerd is
+   * [DONE] Oude code verwijderd na dat alles gecontroleerd is
 - [PLAN] Gebruikersinstellingen toevoegen
 
 ## Fase 3: Geavanceerde Features (Maanden 7-9)
