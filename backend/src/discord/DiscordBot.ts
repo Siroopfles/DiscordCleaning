@@ -1,7 +1,9 @@
-import { Client, ChatInputCommandInteraction } from 'discord.js';
-import { clientConfig, BOT_TOKEN } from './config';
+import { Client, GatewayIntentBits, Events } from 'discord.js';
+import { config } from '../config/discord';
 import { CommandHandler } from './handlers/commandHandler';
-import { logger } from './utils/logger';
+import { initializeNotificationService } from '../services/notification.service';
+import rabbitmqConfig from '../config/rabbitmq';
+import logger from '../utils/logger';
 import { DiscordBotClient } from './types/discord.types';
 
 export class DiscordBot {
@@ -9,7 +11,13 @@ export class DiscordBot {
   private commandHandler: CommandHandler;
 
   constructor() {
-    this.client = new Client(clientConfig) as DiscordBotClient;
+    this.client = new Client({
+      intents: [
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.GuildMembers
+      ]
+    }) as DiscordBotClient;
     this.commandHandler = new CommandHandler(this.client);
     this.setupEventHandlers();
   }
@@ -60,9 +68,22 @@ export class DiscordBot {
 
   public async start(): Promise<void> {
     try {
+      // Initialize RabbitMQ
+      await rabbitmqConfig.initialize();
+      logger.info('RabbitMQ verbinding opgezet');
+
+      // Initialize NotificationService
+      const notificationService = initializeNotificationService(this.client);
+      await notificationService.initialize();
+      logger.info('NotificationService geïnitialiseerd');
+
+      // Load commands
       await this.commandHandler.loadCommands();
-      await this.client.login(BOT_TOKEN);
-      logger.info('Bot succesvol gestart');
+      logger.info('Discord commands geladen');
+
+      // Login to Discord
+      await this.client.login(config.token);
+      logger.info('Discord bot succesvol gestart');
     } catch (error) {
       logger.error('Fout bij het starten van de bot:', error);
       throw error;

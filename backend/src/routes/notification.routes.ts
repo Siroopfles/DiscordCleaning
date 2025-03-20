@@ -2,6 +2,8 @@ import { Router } from 'express';
 import notificationService from '../services/notification.service';
 import { ApiError } from '../utils/ApiError';
 
+const service = notificationService.getInstance();
+
 const router = Router();
 
 // Ophalen van notificaties voor een gebruiker
@@ -10,7 +12,7 @@ router.get('/user/:userId', async (req, res, next) => {
     const { userId } = req.params;
     const { status, limit } = req.query;
 
-    const notifications = await notificationService.getUserNotifications(
+    const notifications = await service.getUserNotifications(
       userId,
       status as string,
       limit ? parseInt(limit as string) : undefined
@@ -31,7 +33,7 @@ router.post('/', async (req, res, next) => {
       throw new ApiError(400, 'Ontbrekende verplichte velden');
     }
 
-    const notification = await notificationService.createNotification(notificationData);
+    const notification = await service.createNotification(notificationData);
     res.status(201).json(notification);
   } catch (error) {
     next(error);
@@ -42,7 +44,7 @@ router.post('/', async (req, res, next) => {
 router.patch('/:notificationId/seen', async (req, res, next) => {
   try {
     const { notificationId } = req.params;
-    const notification = await notificationService.markNotificationAsSeen(notificationId);
+    const notification = await service.markNotificationAsSeen(notificationId);
 
     if (!notification) {
       throw new ApiError(404, 'Notificatie niet gevonden');

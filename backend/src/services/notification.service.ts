@@ -1,11 +1,18 @@
 import { Channel } from 'amqplib';
+import { Client, EmbedBuilder } from 'discord.js';
 import rabbitmqConfig from '../config/rabbitmq';
 import notificationRepository from '../repositories/notification.repository';
 import { INotification } from '../models/Notification';
 import { ApiError } from '../utils/ApiError';
+import logger from '../utils/logger';
 
 export class NotificationService {
   private channel: Channel | null = null;
+  private discordClient: Client;
+
+  constructor(discordClient: Client) {
+    this.discordClient = discordClient;
+  }
 
   async initialize(): Promise<void> {
     await rabbitmqConfig.initialize();
@@ -77,13 +84,32 @@ export class NotificationService {
   }
 
   private async processDiscordNotification(content: any): Promise<void> {
-    const { notificationId, userId, title, message } = content;
+    const { notificationId, channelId, content: messageContent, embed, guildId } = content;
 
     try {
-      // Verwerk Discord notificatie
-      // TODO: Integreer met Discord service voor het versturen van berichten
-      console.log(`Discord notificatie voor user ${userId}: ${title}`);
-      
+      const guild = await this.discordClient.guilds.fetch(guildId);
+      const channel = await guild.channels.fetch(channelId);
+
+      if (!channel?.isTextBased()) {
+        throw new Error('Kanaal is geen tekst kanaal');
+      }
+
+      if (embed) {
+        const embedBuilder = new EmbedBuilder()
+          .setColor(0x0099ff)
+          .setTitle(messageContent.title || 'Notificatie')
+          .setDescription(messageContent.description)
+          .setTimestamp();
+
+        if (messageContent.fields?.length > 0) {
+          embedBuilder.addFields(messageContent.fields);
+        }
+
+        await channel.send({ embeds: [embedBuilder] });
+      } else {
+        await channel.send(messageContent);
+      }
+
       await notificationRepository.markAsSent(notificationId);
     } catch (error) {
       console.error('Fout bij verwerken discord notificatie:', error);
@@ -107,4 +133,22 @@ export class NotificationService {
   }
 }
 
-export default new NotificationService();
+// Singleton instance wordt geïnitialiseerd in de Discord bot setup
+let instance: NotificationService | null = null;
+
+export const initializeNotificationService = (discordClient: Client): NotificationService => {
+  if (!instance) {
+    instance = new NotificationService(discordClient);
+  }
+  return instance;
+};
+
+export default {
+  initialize: initializeNotificationService,
+  getInstance: () => {
+    if (!instance) {
+      throw new Error('NotificationService niet geïnitialiseerd');
+    }
+    return instance;
+  }
+};

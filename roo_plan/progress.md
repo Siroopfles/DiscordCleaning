@@ -23,6 +23,10 @@
 
 ## Fase 2: Essentiële Features (Maanden 4-6)
 - [DONE] Notificatiesysteem implementeren
+   * [DONE] NotificationService met Observer pattern
+   * [DONE] RabbitMQ message queue systeem
+   * [DONE] Discord integratie met EmbedBuilder
+   * [DONE] Error handling en monitoring
 - [DONE] Samenwerkingsborden ontwikkelen
   * [DONE] TaskCard component
   * [DONE] KanbanColumn component
