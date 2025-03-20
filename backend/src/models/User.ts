@@ -17,8 +17,36 @@ const userSchema = new Schema<UserDocument>({
   },
   settings: {
     notifications: {
-      type: Boolean,
-      default: true,
+      discord: {
+        type: Boolean,
+        default: true,
+      },
+      email: {
+        type: Boolean,
+        default: false,
+      },
+      pushNotifications: {
+        type: Boolean,
+        default: false,
+      },
+      notificationTypes: {
+        taskAssigned: {
+          type: Boolean,
+          default: true,
+        },
+        taskCompleted: {
+          type: Boolean,
+          default: true,
+        },
+        taskDue: {
+          type: Boolean,
+          default: true,
+        },
+        pointsEarned: {
+          type: Boolean,
+          default: true,
+        },
+      },
     },
     theme: {
       type: String,
@@ -29,6 +57,44 @@ const userSchema = new Schema<UserDocument>({
       type: String,
       default: 'nl',
       enum: ['nl', 'en'],
+    },
+    taskManagement: {
+      defaultView: {
+        type: String,
+        default: 'list',
+        enum: ['list', 'kanban'],
+      },
+      defaultCategory: {
+        type: String,
+        required: false,
+      },
+      showCompletedTasks: {
+        type: Boolean,
+        default: true,
+      },
+      taskSortOrder: {
+        type: String,
+        default: 'dueDate',
+        enum: ['dueDate', 'priority', 'createdAt'],
+      },
+    },
+    gamification: {
+      showLeaderboard: {
+        type: Boolean,
+        default: true,
+      },
+      showPointsHistory: {
+        type: Boolean,
+        default: true,
+      },
+      showAchievements: {
+        type: Boolean,
+        default: true,
+      },
+      notifyOnRewards: {
+        type: Boolean,
+        default: true,
+      },
     },
   },
 }, {

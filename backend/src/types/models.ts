@@ -2,9 +2,31 @@ export interface IUser {
   discord_id: string;
   username: string;
   settings: {
-    notifications: boolean;
-    theme: string;
-    language: string;
+    notifications: {
+      discord: boolean;
+      email: boolean;
+      pushNotifications: boolean;
+      notificationTypes: {
+        taskAssigned: boolean;
+        taskCompleted: boolean;
+        taskDue: boolean;
+        pointsEarned: boolean;
+      };
+    };
+    theme: 'light' | 'dark';
+    language: 'nl' | 'en';
+    taskManagement: {
+      defaultView: 'list' | 'kanban';
+      defaultCategory?: string;
+      showCompletedTasks: boolean;
+      taskSortOrder: 'dueDate' | 'priority' | 'createdAt';
+    };
+    gamification: {
+      showLeaderboard: boolean;
+      showPointsHistory: boolean;
+      showAchievements: boolean;
+      notifyOnRewards: boolean;
+    };
   };
 }
 
