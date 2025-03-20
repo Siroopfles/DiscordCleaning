@@ -1,6 +1,8 @@
 import axios, { AxiosInstance } from 'axios';
 import { logger } from '../utils/logger';
 
+import { CategoryInfo, UpdateCategoryDto } from '../../types/models';
+
 // Types voor API responses
 interface ApiResponse<T> {
   success: boolean;
@@ -31,11 +33,12 @@ interface Task {
   updatedAt: string;
 }
 
-interface Category {
-  id: string;
+interface CategoryCreate {
   name: string;
-  description?: string;
+  color: string;
 }
+
+// We gebruiken CategoryInfo van models.ts die extends van ICategory
 
 export class ApiClient {
   private client: AxiosInstance;
@@ -52,8 +55,8 @@ export class ApiClient {
 
     // Response interceptor voor error handling
     this.client.interceptors.response.use(
-      response => response,
-      error => {
+      (response: any) => response,
+      (error: any) => {
         logger.error('API Error:', {
           status: error.response?.status,
           message: error.message,
@@ -109,9 +112,45 @@ export class ApiClient {
   }
 
   // Category endpoints
-  async getCategories(): Promise<ApiResponse<Category[]>> {
+  async getCategories(): Promise<ApiResponse<CategoryInfo[]>> {
     try {
-      const response = await this.client.get<ApiResponse<Category[]>>('/categories');
+      const response = await this.client.get<ApiResponse<CategoryInfo[]>>('/categories');
+      return response.data;
+    } catch (error) {
+      throw this.handleError(error);
+    }
+  }
+
+  async getCategory(categoryId: string): Promise<ApiResponse<CategoryInfo>> {
+    try {
+      const response = await this.client.get<ApiResponse<CategoryInfo>>(`/categories/${categoryId}`);
+      return response.data;
+    } catch (error) {
+      throw this.handleError(error);
+    }
+  }
+
+  async createCategory(data: CategoryCreate): Promise<ApiResponse<CategoryInfo>> {
+    try {
+      const response = await this.client.post<ApiResponse<CategoryInfo>>('/categories', data);
+      return response.data;
+    } catch (error) {
+      throw this.handleError(error);
+    }
+  }
+
+  async updateCategory(categoryId: string, data: UpdateCategoryDto): Promise<ApiResponse<CategoryInfo>> {
+    try {
+      const response = await this.client.patch<ApiResponse<CategoryInfo>>(`/categories/${categoryId}`, data);
+      return response.data;
+    } catch (error) {
+      throw this.handleError(error);
+    }
+  }
+
+  async deleteCategory(categoryId: string): Promise<ApiResponse<void>> {
+    try {
+      const response = await this.client.delete<ApiResponse<void>>(`/categories/${categoryId}`);
       return response.data;
     } catch (error) {
       throw this.handleError(error);

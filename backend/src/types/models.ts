@@ -41,3 +41,20 @@ export interface IServer {
   created_at: Date;
   updated_at: Date;
 }
+
+export interface CategoryTaskStats {
+  completed: number;
+  in_progress: number;
+  open: number;
+}
+
+export interface CategoryInfo extends ICategory {
+  id: string;
+  task_count: number;
+  task_stats: CategoryTaskStats;
+}
+
+export interface UpdateCategoryDto {
+  name?: string;
+  color?: string;
+}

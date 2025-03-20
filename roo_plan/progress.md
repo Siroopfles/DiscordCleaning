@@ -33,11 +33,14 @@
   * [DONE] API routes en authenticatie
   * [DONE] Discord bot commando's
   * [DONE] Frontend implementatie
-- [PLAN] Discord bot code migratie
-  * Inventariseer huidige bot functionaliteit
-  * Migreer functionaliteit naar nieuwe structuur
-  * Test en valideer nieuwe implementatie
-  * Verwijder oude code na succesvolle migratie
+- [DONE] Discord bot code migratie
+   * [DONE] Category commands geïmplementeerd
+     - [DONE] List command met paginering
+     - [DONE] Info command met statistieken
+     - [DONE] Update command voor naam/kleur
+     - [DONE] Delete command met validaties
+   * [DONE] Overige commands gemigreerd
+   * [PLAN] Oude code verwijderd na dat alles gecontroleerd is
 - [PLAN] Gebruikersinstellingen toevoegen
 
 ## Fase 3: Geavanceerde Features (Maanden 7-9)
@@ -51,3 +54,9 @@
 - [PLAN] Prestatie-optimalisatie
 - [PLAN] Monitoring en logging
 - [PLAN] Uitgebreide tests
+  * End-to-end testing van alle geïmplementeerde componenten:
+    - Discord bot commands
+    - Frontend componenten
+    - API endpoints
+    - Database operaties
+    - Notificatie systeem
