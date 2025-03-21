@@ -8,13 +8,24 @@
 - Frontend Service (Next.js)
 - Backend API Service (Express.js + TypeScript)
 - @newboom/discord Package (Discord.js)
-  * Discord Bot Service met command handlers
-  * Notificatie Integratie
-  * Webhook Handling
-  * Currency Management System
-    - Rate Limiting Service
-    - Transaction Monitoring
-    - Permission Management
+  * Core Services
+    - Discord Bot Service met command handlers
+    - Rate Limiting Service (interne implementatie)
+    - Permission Management Service
+    - Monitoring Service
+  * Integration Services
+    - Message Queue Adapter Service
+    - Database Abstraction Layer
+    - Notification Bridge Service
+  * Management Services
+    - Currency Management System
+      * Transaction Processing
+      * Rate Limiting
+      * Audit Logging
+    - Command Management System
+      * Command Registration
+      * Permission Validation
+      * Rate Control
 - Notificatie Service
 - Webhook Service
 
@@ -36,12 +47,15 @@
 ### Ontwerppatronen
 - Repository pattern voor data-toegang
 - Observer pattern voor notificaties
-- Factory pattern voor taakcreatie
+- Factory pattern voor service instantiatie
 - Strategy pattern voor notificatiekanalen
-- Rate Limiter pattern voor currency operaties
-- Aggregator pattern voor analytics data
-- Chain of Responsibility voor data transformaties
+- Rate Limiter pattern voor resource controle
+  * Token Bucket Algorithm voor currency operaties
+  * Sliding Window voor API rate limiting
+- Adapter pattern voor externe service integratie
 - Command pattern voor Discord interacties
+- Service Locator pattern voor dependency management
+- Bridge pattern voor notification routing
 
 ## Codeerstandaarden
 - TypeScript voor type-veiligheid

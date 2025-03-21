@@ -31,10 +31,35 @@
 - [DONE] Webhook-ondersteuning
 
 ## Fase 4: Afwerking (Maanden 10-12)
-- [DONE] Discord uit backend halen en verplaatsen naar aparte package
-  * Core functionaliteit gemigreerd
-  * Alle commands overgezet (task, category, currency)
-  * Currency systeem verbeterd met monitoring en rate limiting
+- [WIP-B] Discord package migratie voltooien
+  * [DONE] Initiële migratie
+    - Core functionaliteit gemigreerd
+    - Alle commands overgezet (task, category, currency)
+    - Currency systeem verbeterd met monitoring en rate limiting
+  * [PLAN] Monitoring & Logging Interface
+    - Winston/Bunyan logging service implementeren
+    - Prometheus metrics endpoints toevoegen
+    - Custom monitoring events definiëren
+  * [PLAN] RabbitMQ Integratie
+    - Message queue service abstractie
+    - Event publishers voor Discord events
+    - Consumer implementations
+  * [PLAN] Database Abstractie Layer
+    - Repository pattern implementeren
+    - MongoDB connectie abstractie
+    - Redis caching integratie
+  * [PLAN] Legacy Feature Migratie
+    - Command handlers voltooien
+    - Permissie systeem integreren
+    - Rate limiting perfectioneren
+  * [PLAN] Testing & Validatie
+    - Unit tests uitbreiden (target: >80% coverage)
+    - Integratie tests toevoegen
+    - End-to-end test scenarios
+  * [PLAN] Deployment & Rollout
+    - Staging deployment configureren
+    - Canary testing setup
+    - Rollback procedures definiëren
 - [PLAN] Backend-codebase controleren en ontbrekende bestanden herstellen
 - [PLAN] Frontend-codebase controleren en ontbrekende bestanden herstellen
 - [PLAN] UI/UX optimalisatie

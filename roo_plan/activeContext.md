@@ -50,7 +50,7 @@ De primaire focus ligt op de voltooiing van Fase 3 en voorbereiding voor Fase 4:
     - Structured logging met Winston
 
 ### Volgende Stappen
-- ✅ Discord package migratie volledig afgerond
+- ✅ Discord package initiële migratie afgerond
   * Nieuwe @newboom/discord package gecreëerd en geïmplementeerd
   * Core functionaliteit gemigreerd
   * Alle commands (task, category, currency) overgezet
@@ -61,6 +61,33 @@ De primaire focus ligt op de voltooiing van Fase 3 en voorbereiding voor Fase 4:
     - Monitoring en statistieken
   * Backend volledig geüpdatet
   * End-to-end tests succesvol
+
+- 🔄 Discord Package Migratie Voltooiing
+  * Monitoring & Logging Interface
+    - Winston/Bunyan logging service
+    - Prometheus metrics endpoints
+    - Custom monitoring events
+  * Message Queue Integratie
+    - RabbitMQ service abstractie
+    - Event publishers voor Discord events
+    - Consumer implementations
+  * Database Abstractie Layer
+    - Repository pattern implementatie
+    - MongoDB connectie abstractie
+    - Redis caching integratie
+  * Legacy Feature Migratie
+    - Command handlers voltooien
+    - Permissie systeem integreren
+    - Rate limiting perfectioneren
+  * Testing & Validatie
+    - Unit tests uitbreiden
+    - Integratie tests toevoegen
+    - End-to-end scenarios
+  * Deployment & Rollout
+    - Staging deployment
+    - Canary testing
+    - Rollback procedures
+
 - 🔄 UI/UX optimalisatie voorbereiden
 - 🔄 End-to-end testing uitvoeren
 
