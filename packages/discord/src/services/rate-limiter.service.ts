@@ -1,4 +1,7 @@
-interface RateLimitConfig {
+import { BaseService } from './base.service';
+import { DiscordClient } from '../types';
+
+export interface RateLimitConfig {
   maxAttempts: number;
   windowMs: number;
 }
@@ -8,13 +11,18 @@ interface RateLimit {
   resetAt: number;
 }
 
-export class RateLimiterService {
+export class RateLimiterService extends BaseService {
   private limits: Map<string, RateLimit>;
   private config: RateLimitConfig;
 
-  constructor(config: RateLimitConfig = { maxAttempts: 5, windowMs: 60000 }) {
+  constructor(client: DiscordClient, config: RateLimitConfig = { maxAttempts: 5, windowMs: 60000 }) {
+    super(client);
     this.limits = new Map();
     this.config = config;
+  }
+
+  protected async initialize(): Promise<void> {
+    this.log('info', 'Rate limiter service initialized', this.config);
   }
 
   private getKey(userId: string, serverId: string, action: string): string {
@@ -23,10 +31,15 @@ export class RateLimiterService {
 
   private cleanupExpired(): void {
     const now = Date.now();
+    let cleaned = 0;
     for (const [key, limit] of this.limits.entries()) {
       if (limit.resetAt <= now) {
         this.limits.delete(key);
+        cleaned++;
       }
+    }
+    if (cleaned > 0) {
+      this.log('debug', 'Cleaned expired rate limits', { cleaned });
     }
   }
 
@@ -43,6 +56,7 @@ export class RateLimiterService {
         attempts: 1,
         resetAt: now + this.config.windowMs
       });
+      this.log('debug', 'New rate limit created', { userId, serverId, action });
       return true;
     }
 
@@ -51,14 +65,29 @@ export class RateLimiterService {
         attempts: 1,
         resetAt: now + this.config.windowMs
       });
+      this.log('debug', 'Rate limit reset', { userId, serverId, action });
       return true;
     }
 
     if (currentLimit.attempts >= this.config.maxAttempts) {
+      this.log('warn', 'Rate limit exceeded', {
+        userId,
+        serverId,
+        action,
+        attempts: currentLimit.attempts,
+        resetAt: currentLimit.resetAt
+      });
       return false;
     }
 
     currentLimit.attempts++;
+    this.log('debug', 'Rate limit attempt recorded', {
+      userId,
+      serverId,
+      action,
+      attempts: currentLimit.attempts,
+      remaining: this.config.maxAttempts - currentLimit.attempts
+    });
     return true;
   }
 

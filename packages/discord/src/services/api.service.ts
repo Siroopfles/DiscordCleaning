@@ -4,16 +4,23 @@ import {
   CurrencyReward,
   CurrencyTransfer
 } from '../types/api';
-import { Logger } from '../types';
+import { DiscordClient } from '../types';
+import { BaseService } from './base.service';
 
-export class DefaultApiService implements ApiService {
-  private client: AxiosInstance;
-  private logger?: Logger;
+export class DefaultApiService extends BaseService implements ApiService {
+  private axiosClient!: AxiosInstance;
 
-  constructor(baseURL: string, logger?: Logger) {
-    this.logger = logger;
-    this.client = axios.create({
-      baseURL: baseURL,
+  constructor(client: DiscordClient) {
+    super(client);
+    const baseURL = client.config.apiBaseUrl;
+    if (!baseURL) {
+      throw new Error('API base URL is required');
+    }
+  }
+
+  protected async initialize(): Promise<void> {
+    this.axiosClient = axios.create({
+      baseURL: this.client.config.apiBaseUrl,
       timeout: 5000,
       headers: {
         'Content-Type': 'application/json'
@@ -21,9 +28,9 @@ export class DefaultApiService implements ApiService {
     });
 
     // Request interceptor voor logging
-    this.client.interceptors.request.use(
+    this.axiosClient.interceptors.request.use(
       (config) => {
-        this.logger?.debug('API Request:', {
+        this.log('debug', 'API Request:', {
           method: config.method?.toUpperCase(),
           url: config.url,
           data: config.data,
@@ -32,15 +39,15 @@ export class DefaultApiService implements ApiService {
         return config;
       },
       (error) => {
-        this.logger?.error('API Request Error:', error);
+        this.log('error', 'API Request Error:', error);
         return Promise.reject(error);
       }
     );
 
     // Response interceptor voor logging en error handling
-    this.client.interceptors.response.use(
+    this.axiosClient.interceptors.response.use(
       (response) => {
-        this.logger?.debug('API Response:', {
+        this.log('debug', 'API Response:', {
           status: response.status,
           data: response.data,
           url: response.config.url
@@ -56,11 +63,11 @@ export class DefaultApiService implements ApiService {
           timestamp: new Date().toISOString()
         };
 
-        this.logger?.error('API Error:', errorDetails);
+        this.log('error', 'API Error:', errorDetails);
 
         // Log rate limit specifieke informatie
         if (error.response?.status === 429) {
-          this.logger?.warn('Rate Limit Hit:', {
+          this.log('warn', 'Rate Limit Hit:', {
             ...errorDetails,
             retryAfter: error.response.headers['retry-after']
           });
@@ -73,7 +80,7 @@ export class DefaultApiService implements ApiService {
 
   // Helper method voor het loggen van currency operaties
   private logCurrencyOperation(operation: string, details: any) {
-    this.logger?.info(`Currency Operation: ${operation}`, {
+    this.log('info', `Currency Operation: ${operation}`, {
       ...details,
       timestamp: new Date().toISOString()
     });
@@ -102,7 +109,7 @@ export class DefaultApiService implements ApiService {
 
   async createTask(data: any) {
     try {
-      const response = await this.client.post('/tasks', data);
+      const response = await this.axiosClient.post('/tasks', data);
       return response.data;
     } catch (error) {
       throw this.handleError(error);
@@ -111,7 +118,7 @@ export class DefaultApiService implements ApiService {
 
   async getTasks() {
     try {
-      const response = await this.client.get('/tasks');
+      const response = await this.axiosClient.get('/tasks');
       return response.data;
     } catch (error) {
       throw this.handleError(error);
@@ -120,7 +127,7 @@ export class DefaultApiService implements ApiService {
 
   async updateTask(taskId: string, data: any) {
     try {
-      const response = await this.client.patch(`/tasks/${taskId}`, data);
+      const response = await this.axiosClient.patch(`/tasks/${taskId}`, data);
       return response.data;
     } catch (error) {
       throw this.handleError(error);
@@ -129,7 +136,7 @@ export class DefaultApiService implements ApiService {
 
   async deleteTask(taskId: string) {
     try {
-      const response = await this.client.delete(`/tasks/${taskId}`);
+      const response = await this.axiosClient.delete(`/tasks/${taskId}`);
       return response.data;
     } catch (error) {
       throw this.handleError(error);
@@ -138,7 +145,7 @@ export class DefaultApiService implements ApiService {
 
   async getCategories() {
     try {
-      const response = await this.client.get('/categories');
+      const response = await this.axiosClient.get('/categories');
       return response.data;
     } catch (error) {
       throw this.handleError(error);
@@ -147,7 +154,7 @@ export class DefaultApiService implements ApiService {
 
   async getCategory(categoryId: string) {
     try {
-      const response = await this.client.get(`/categories/${categoryId}`);
+      const response = await this.axiosClient.get(`/categories/${categoryId}`);
       return response.data;
     } catch (error) {
       throw this.handleError(error);
@@ -156,7 +163,7 @@ export class DefaultApiService implements ApiService {
 
   async createCategory(data: any) {
     try {
-      const response = await this.client.post('/categories', data);
+      const response = await this.axiosClient.post('/categories', data);
       return response.data;
     } catch (error) {
       throw this.handleError(error);
@@ -165,7 +172,7 @@ export class DefaultApiService implements ApiService {
 
   async updateCategory(categoryId: string, data: any) {
     try {
-      const response = await this.client.patch(`/categories/${categoryId}`, data);
+      const response = await this.axiosClient.patch(`/categories/${categoryId}`, data);
       return response.data;
     } catch (error) {
       throw this.handleError(error);
@@ -174,7 +181,7 @@ export class DefaultApiService implements ApiService {
 
   async deleteCategory(categoryId: string) {
     try {
-      const response = await this.client.delete(`/categories/${categoryId}`);
+      const response = await this.axiosClient.delete(`/categories/${categoryId}`);
       return response.data;
     } catch (error) {
       throw this.handleError(error);
@@ -184,7 +191,7 @@ export class DefaultApiService implements ApiService {
   // Currency endpoints
   async getBalance(userId: string, serverId: string) {
     try {
-      const response = await this.client.get(`/currency/${userId}/balance?serverId=${serverId}`);
+      const response = await this.axiosClient.get(`/currency/${userId}/balance?serverId=${serverId}`);
       return response.data;
     } catch (error) {
       throw this.handleError(error);
@@ -200,7 +207,7 @@ export class DefaultApiService implements ApiService {
         description: data.description
       });
 
-      const response = await this.client.post(`/currency/${userId}/reward?serverId=${serverId}`, data);
+      const response = await this.axiosClient.post(`/currency/${userId}/reward?serverId=${serverId}`, data);
       
       if (response.data.success) {
         this.logCurrencyOperation('REWARD_SUCCESS', {
@@ -233,7 +240,10 @@ export class DefaultApiService implements ApiService {
         description: data.description
       });
 
-      const response = await this.client.post(`/currency/${fromUserId}/transfer/${toUserId}?serverId=${serverId}`, data);
+      const response = await this.axiosClient.post(
+        `/currency/${fromUserId}/transfer/${toUserId}?serverId=${serverId}`,
+        data
+      );
       
       if (response.data.success) {
         this.logCurrencyOperation('TRANSFER_SUCCESS', {
@@ -265,7 +275,7 @@ export class DefaultApiService implements ApiService {
       query.append('serverId', serverId);
       if (page) query.append('page', page.toString());
       if (limit) query.append('limit', limit.toString());
-      const response = await this.client.get(`/currency/${userId}/transactions?${query.toString()}`);
+      const response = await this.axiosClient.get(`/currency/${userId}/transactions?${query.toString()}`);
       return response.data;
     } catch (error) {
       throw this.handleError(error);
@@ -277,7 +287,7 @@ export class DefaultApiService implements ApiService {
       const query = new URLSearchParams();
       query.append('serverId', serverId);
       if (limit) query.append('limit', limit.toString());
-      const response = await this.client.get(`/currency/leaderboard?${query.toString()}`);
+      const response = await this.axiosClient.get(`/currency/leaderboard?${query.toString()}`);
       return response.data;
     } catch (error) {
       throw this.handleError(error);
@@ -286,7 +296,7 @@ export class DefaultApiService implements ApiService {
 
   async getUserStatistics(userId: string, serverId: string) {
     try {
-      const response = await this.client.get(`/currency/${userId}/statistics?serverId=${serverId}`);
+      const response = await this.axiosClient.get(`/currency/${userId}/statistics?serverId=${serverId}`);
       return response.data;
     } catch (error) {
       throw this.handleError(error);

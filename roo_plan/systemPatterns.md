@@ -4,30 +4,55 @@
 
 ## Architectuurpatronen
 
-### Microservices Architectuur
+### Microservices & Modulaire Architectuur
 - Frontend Service (Next.js)
 - Backend API Service (Express.js + TypeScript)
 - @newboom/discord Package (Discord.js)
-  * Core Services
-    - Discord Bot Service met command handlers
-    - Rate Limiting Service (interne implementatie)
-    - Permission Management Service
-    - Monitoring Service
-  * Integration Services
-    - Message Queue Adapter Service
-    - Database Abstraction Layer
-    - Notification Bridge Service
-  * Management Services
-    - Currency Management System
-      * Transaction Processing
-      * Rate Limiting
-      * Audit Logging
-    - Command Management System
-      * Command Registration
-      * Permission Validation
-      * Rate Control
+  * Submodules Architecture
+    - /services
+      * Core Services Module
+        - Discord Bot Service
+        - Rate Limiting Service
+        - Permission Management Service
+        - Monitoring Service
+      * Integration Services Module
+        - Message Queue Adapter
+        - Database Abstractions
+        - Notification Bridge
+      * Management Services Module
+        - Currency Management
+        - Command Management
+    - /types
+      * Core Types Module
+      * Service Types Module
+      * Integration Types Module
+    - /utils
+      * Permissions Module
+      * Validation Module
+      * Helper Functions Module
+    - /commands
+      * Category Commands Module
+      * Currency Commands Module
+      * Task Commands Module
+    - /events
+      * Discord Events Module
+      * System Events Module
+    - /models
+      * Data Models Module
+      * Schema Definitions Module
+    - /config
+      * Environment Config Module
+      * Service Config Module
 - Notificatie Service
 - Webhook Service
+
+### Module Isolatie Principes
+- Strict module boundaries
+- Duidelijk gedefinieerde interfaces
+- Minimale cross-module dependencies
+- Interne encapsulatie per module
+- Gestandaardiseerde exports
+- Feature-based modularisatie
 
 ### Communicatiepatronen
 - REST API voor client-server communicatie

@@ -36,10 +36,37 @@
     - Core functionaliteit gemigreerd
     - Alle commands overgezet (task, category, currency)
     - Currency systeem verbeterd met monitoring en rate limiting
-  * [PLAN] Monitoring & Logging Interface
-    - Winston/Bunyan logging service implementeren
-    - Prometheus metrics endpoints toevoegen
-    - Custom monitoring events definiëren
+  * [DONE] Monitoring & Logging Interface
+    - Winston/Bunyan logging service geïmplementeerd
+    - Prometheus metrics endpoints toegevoegd
+    - Custom monitoring events gedefinieerd
+    - Performance tracking geïntegreerd
+  * [PLAN] Codebase Modularisatie
+    - Services Module Herstructurering
+      * Core Services submodule opzetten
+      * Integration Services submodule opzetten
+      * Management Services submodule opzetten
+    - Types Module Herstructurering
+      * Core Types submodule opzetten
+      * Service Types submodule opzetten
+      * Integration Types submodule opzetten
+    - Utils Module Herstructurering
+      * Permissions submodule opzetten
+      * Validation submodule opzetten
+      * Helpers submodule opzetten
+    - Commands Module Herstructurering
+      * Category Commands submodule opzetten
+      * Currency Commands submodule opzetten
+      * Task Commands submodule opzetten
+    - Events Module Herstructurering
+      * Discord Events submodule opzetten
+      * System Events submodule opzetten
+    - Models Module Herstructurering
+      * Data Models submodule opzetten
+      * Schema Definitions submodule opzetten
+    - Config Module Herstructurering
+      * Environment Config submodule opzetten
+      * Service Config submodule opzetten
   * [PLAN] RabbitMQ Integratie
     - Message queue service abstractie
     - Event publishers voor Discord events

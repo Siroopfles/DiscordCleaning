@@ -35,3 +35,4 @@ export interface DiscordClient extends Client {
 
 export * from './notification';
 export * from './api';
+export * from './monitoring';
