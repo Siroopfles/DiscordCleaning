@@ -41,6 +41,16 @@ const logger = winston.createLogger({
   ]
 });
 
+interface WebhookContext {
+  webhookId: string;
+  eventType: string;
+  deliveryId?: string;
+  status?: string;
+  retryCount?: number;
+  duration?: number;
+  error?: string;
+}
+
 // Add request context for structured logging
 export const addRequestContext = (req: any) => {
   return {
@@ -53,14 +63,7 @@ export const addRequestContext = (req: any) => {
 };
 
 // Add webhook context for structured logging
-export const addWebhookContext = (data: {
-  webhookId: string;
-  eventType: string;
-  deliveryId?: string;
-  status?: string;
-  retryCount?: number;
-  duration?: number;
-}) => {
+export const addWebhookContext = (data: WebhookContext): WebhookContext & { service: string, timestamp: string } => {
   return {
     ...data,
     service: 'webhook',

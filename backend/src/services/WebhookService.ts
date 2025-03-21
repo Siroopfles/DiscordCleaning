@@ -1,15 +1,17 @@
 import crypto from 'crypto';
 import axios from 'axios';
 import { Types } from 'mongoose';
-import logger from '../utils/logger';
+import logger, { addWebhookContext } from '../utils/logger';
 import queueService, { QUEUES } from '../config/queue';
 import { webhookRateLimiter } from '../middleware/rateLimiter';
-import { 
-  webhookDeliveryCounter, 
+import {
+  webhookDeliveryCounter,
   webhookDeliveryDuration,
   webhookErrorCounter,
-  webhookRetryCounter 
+  webhookRetryCounter,
+  webhookQueueSize
 } from '../config/webhookMetrics';
+import { WebhookError, WebhookErrorTypes } from '../middleware/errorHandler';
 import webhookConfigurationRepository, { IWebhookConfigurationRepository } from '../repositories/WebhookConfigurationRepository';
 import webhookDeliveryRepository, { IWebhookDeliveryRepository } from '../repositories/WebhookDeliveryRepository';
 import { IWebhookConfiguration, WebhookConfiguration } from '../models/WebhookConfiguration';
@@ -69,6 +71,9 @@ export class WebhookService {
     });
 
     // Queue the webhook delivery
+    // Update queue size metric before publishing
+    webhookQueueSize.labels('pending').inc();
+    
     await queueService.publishToQueue(QUEUES.WEBHOOK_DELIVERY, {
       webhookId,
       event,
@@ -76,6 +81,13 @@ export class WebhookService {
       deliveryId,
       retryCount: 0
     });
+
+    logger.info('Webhook delivery queued', addWebhookContext({
+      webhookId,
+      eventType: event,
+      deliveryId,
+      status: 'queued'
+    }));
 
     return delivery;
   }
@@ -91,18 +103,23 @@ export class WebhookService {
     if (!webhook) {
       throw new Error(`Webhook configuration not found: ${webhookId}`);
     }
+const payloadString = JSON.stringify(payload);
+const signature = this.generateSignature(webhook.secret, payloadString);
 
-    const payloadString = JSON.stringify(payload);
-    const signature = this.generateSignature(webhook.secret, payloadString);
+// Start delivery timer
+const startTime = process.hrtime();
 
-    // Start delivery timer
-    const endTimer = webhookDeliveryDuration.labels(event).startTimer();
 
     // Check rate limits before delivery
     const isLimited = await webhookRateLimiter.isRateLimited(webhook.url);
     if (isLimited) {
-      logger.warn(`Rate limit exceeded for webhook ${webhookId} to ${webhook.url}`);
-      throw new Error('Rate limit exceeded');
+      logger.warn('Rate limit exceeded for webhook', addWebhookContext({
+        webhookId,
+        eventType: event,
+        deliveryId,
+        status: 'rate_limited'
+      }));
+      throw new WebhookError('Rate limit exceeded', 429, WebhookErrorTypes.RATE_LIMIT);
     }
 
     try {
@@ -120,8 +137,10 @@ export class WebhookService {
         },
         timeout: 10000 // 10 second timeout
       });
+const hrDuration = process.hrtime(startTime);
+const duration = hrDuration[0] + hrDuration[1] / 1e9; // Convert to seconds
+webhookDeliveryDuration.labels('success', event).observe(duration);
 
-      const duration = endTimer();
 
       // Update delivery status
       await this.webhookDeliveryRepo.updateDeliveryStatus(deliveryId, 'success', {
@@ -130,14 +149,32 @@ export class WebhookService {
         duration
       });
 
+      // Update metrics
       webhookDeliveryCounter.labels('success', event).inc();
+      webhookQueueSize.labels('pending').dec();
+
+      logger.info('Webhook delivery successful', addWebhookContext({
+        webhookId,
+        eventType: event,
+        deliveryId,
+        status: 'success',
+        duration
+      }));
 
     } catch (error: any) {
-      const duration = endTimer();
+      const hrDuration = process.hrtime(startTime);
+      const duration = hrDuration[0] + hrDuration[1] / 1e9; // Convert to seconds
+      webhookDeliveryDuration.labels('failed', event).observe(duration);
       const isRetryable = this.isRetryableError(error);
       const isRateLimit = error.message === 'Rate limit exceeded' || error.response?.status === 429;
 
       // Update delivery status
+      // Update queue metrics
+      webhookQueueSize.labels('pending').dec();
+      if (isRetryable || isRateLimit) {
+        webhookQueueSize.labels('failed').inc();
+      }
+
       await this.webhookDeliveryRepo.updateDeliveryStatus(deliveryId, 'failed', {
         statusCode: error.response?.status || (isRateLimit ? 429 : 500),
         error: error.message,
@@ -147,6 +184,16 @@ export class WebhookService {
           this.calculateNextRetry(retryCount) :
           undefined
       });
+
+      logger.error('Webhook delivery failed', addWebhookContext({
+        webhookId,
+        eventType: event,
+        deliveryId,
+        status: 'failed',
+        error: error.message,
+        retryCount,
+        duration
+      }));
 
       // Track rate limit metrics
       if (isRateLimit) {
