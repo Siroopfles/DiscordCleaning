@@ -16,6 +16,8 @@
 - WebSockets voor real-time updates
 - Message Queues (RabbitMQ) voor asynchrone processen
 - Webhook endpoints voor externe integraties
+- OAuth2 flow voor externe diensten
+- Bi-directional sync voor calendar integratie
 
 ### Datapatronen
 - MongoDB voor flexibele documentopslag

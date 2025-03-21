@@ -62,7 +62,21 @@
     - [DONE] AnalyticsDashboard met Chart.js
     - [DONE] Redux state management
     - [DONE] API integratie
-- [PLAN] Google Calendar integratie
+- [WIP] Google Calendar integratie
+  * [DONE] OAuth2 setup en basis API integratie
+    - [DONE] Google OAuth credentials configuratie
+    - [DONE] NextAuth.js integratie
+    - [DONE] JWT token management
+  * [DONE] Calendar sync service
+    - [DONE] Bi-directional sync implementatie
+    - [DONE] Message queue setup
+    - [DONE] Caching en rate limiting
+  * [DONE] Frontend implementatie
+    - [DONE] Calendar view met react-big-calendar
+    - [DONE] Event editing interface
+    - [DONE] Redux state management
+    - [DONE] Permission handling
+  * [PLAN] Monitoring en performance optimalisatie
 - [PLAN] Webhook-ondersteuning
 
 ## Fase 4: Afwerking (Maanden 10-12)
