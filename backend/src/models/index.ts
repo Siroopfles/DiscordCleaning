@@ -1,8 +1,11 @@
-export { Achievement, IAchievement } from './Achievement';
-export { AchievementProgress, IAchievementProgress } from './AchievementProgress';
-export { LeaderboardSnapshot, ILeaderboardSnapshot, ILeaderboardEntry } from './LeaderboardSnapshot';
-export { User, IUser } from './User';
-export { Task, ITask } from './Task';
-
-// Re-export voor gemakkelijke import in andere modules
-export * as Models from './index';
+export * from './Achievement';
+export * from './AchievementProgress';
+export * from './Category';
+export * from './Currency';
+export * from './LeaderboardSnapshot';
+export * from './Notification';
+export * from './Server';
+export * from './Task';
+export * from './User';
+export * from './TaskHistory';
+export * from './AnalyticsData';

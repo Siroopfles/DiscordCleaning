@@ -21,12 +21,16 @@
 - MongoDB voor flexibele documentopslag
 - Caching met Redis
 - Event-driven dataflow
+- Time-series data voor analytics
+- Aggregatie pipelines voor statistieken
 
 ### Ontwerppatronen
 - Repository pattern voor data-toegang
 - Observer pattern voor notificaties
 - Factory pattern voor taakcreatie
 - Strategy pattern voor notificatiekanalen
+- Aggregator pattern voor analytics data
+- Chain of Responsibility voor data transformaties
 
 ## Codeerstandaarden
 - TypeScript voor type-veiligheid
