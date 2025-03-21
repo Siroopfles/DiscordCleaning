@@ -8,6 +8,9 @@ import WebhookConfiguration, { IWebhookConfiguration } from '../../models/Webhoo
 import WebhookDelivery, { IWebhookDelivery } from '../../models/WebhookDelivery';
 import queueService from '../../config/queue';
 
+type WebhookDoc = mongoose.Document<unknown, {}, IWebhookConfiguration> & 
+  Omit<IWebhookConfiguration & { _id: mongoose.Types.ObjectId }, never>;
+
 describe('Webhook Integration Tests', () => {
   let mockWebhookUrl: string;
   
@@ -92,8 +95,12 @@ describe('Webhook Integration Tests', () => {
         events: ['task.completed'],
         secret: 'test-secret',
         enabled: true,
-        headers: {}
-      } as IWebhookConfiguration);
+        headers: {},
+        retryCount: 3,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      }) as WebhookDoc;
+      
       webhookId = webhook._id.toString();
     });
 
@@ -160,8 +167,12 @@ describe('Webhook Integration Tests', () => {
         events: ['task.completed'],
         secret: 'test-secret',
         enabled: true,
-        headers: {}
-      } as IWebhookConfiguration);
+        headers: {},
+        retryCount: 3,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      }) as WebhookDoc;
+
       webhookId = webhook._id.toString();
 
       // Mock webhook endpoint
@@ -202,8 +213,12 @@ describe('Webhook Integration Tests', () => {
         events: ['task.completed'],
         secret: 'test-secret',
         enabled: true,
-        headers: {}
-      } as IWebhookConfiguration);
+        headers: {},
+        retryCount: 3,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      }) as WebhookDoc;
+
       webhookId = webhook._id.toString();
     });
 
@@ -239,8 +254,11 @@ describe('Webhook Integration Tests', () => {
         events: ['task.completed'],
         secret: 'test-secret',
         enabled: true,
-        headers: {}
-      } as IWebhookConfiguration);
+        headers: {},
+        retryCount: 3,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      }) as WebhookDoc;
 
       const payload = { taskId: '123', status: 'completed' };
 

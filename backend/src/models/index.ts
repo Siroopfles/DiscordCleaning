@@ -9,3 +9,5 @@ export * from './Task';
 export * from './User';
 export * from './TaskHistory';
 export * from './AnalyticsData';
+export * from './WebhookConfiguration';
+export * from './WebhookDelivery';
