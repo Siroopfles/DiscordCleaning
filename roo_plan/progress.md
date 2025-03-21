@@ -62,7 +62,7 @@
     - [DONE] AnalyticsDashboard met Chart.js
     - [DONE] Redux state management
     - [DONE] API integratie
-- [WIP] Google Calendar integratie
+- [DONE] Google Calendar integratie
   * [DONE] OAuth2 setup en basis API integratie
     - [DONE] Google OAuth credentials configuratie
     - [DONE] NextAuth.js integratie
@@ -76,10 +76,17 @@
     - [DONE] Event editing interface
     - [DONE] Redux state management
     - [DONE] Permission handling
-  * [PLAN] Monitoring en performance optimalisatie
+  * [DONE] Monitoring en performance optimalisatie
+    - [DONE] Prometheus metrics configuratie voor API en sync operaties
+    - [DONE] Elastic APM integratie voor performance tracking
+    - [DONE] Redis caching optimalisatie en monitoring
+    - [DONE] Structured logging met Winston
 - [PLAN] Webhook-ondersteuning
 
 ## Fase 4: Afwerking (Maanden 10-12)
+- [PLAN] Discord uit backend halen en verplaatsen naar aparte package
+- [PLAN] Backend-codebase controleren en ontbrekende bestanden herstellen
+- [PLAN] Frontend-codebase controleren en ontbrekende bestanden herstellen
 - [PLAN] UI/UX optimalisatie
 - [PLAN] Prestatie-optimalisatie
 - [PLAN] Monitoring en logging

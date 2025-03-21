@@ -4,6 +4,8 @@ import cors from 'cors';
 import { json } from 'body-parser';
 import { createWebSocketService } from './services/WebSocketService';
 import { websocketConfig } from './config/websocket';
+import webhookRoutes from './routes/webhook.routes';
+import { initWebhookMetrics } from './config/webhookMetrics';
 
 // Initialize express app
 const app: Express = express();
@@ -18,6 +20,12 @@ app.use(json());
 
 // Initialize WebSocket service
 const wsService = createWebSocketService(httpServer);
+
+// Initialize webhook metrics
+initWebhookMetrics();
+
+// Register routes
+app.use('/api/webhooks', webhookRoutes);
 
 // Basic health check route
 app.get('/health', (req, res) => {

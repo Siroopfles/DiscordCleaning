@@ -1,0 +1,61 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: 'calendar-service'
+    static_configs:
+      - targets: ['localhost:9091']
+    metrics_path: '/metrics'
+    scheme: 'http'
+
+  - job_name: 'redis'
+    static_configs:
+      - targets: ['localhost:9121']
+    metrics_path: '/metrics'
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+          - 'localhost:9093'
+
+rules:
+  groups:
+    - name: calendar_alerts
+      rules:
+        - alert: HighResponseTime
+          expr: rate(calendar_api_duration_seconds_sum[5m]) / rate(calendar_api_duration_seconds_count[5m]) > 0.2
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: High API response time
+            description: Calendar API response time is above 200ms
+
+        - alert: LowCacheHitRate
+          expr: rate(calendar_cache_hits_total[15m]) / (rate(calendar_cache_hits_total[15m]) + rate(calendar_cache_misses_total[15m])) < 0.6
+          for: 15m
+          labels:
+            severity: warning
+          annotations:
+            summary: Low cache hit rate
+            description: Cache hit rate is below 60%
+
+        - alert: LowRateLimit
+          expr: calendar_rate_limit_remaining < 10
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: Rate limit nearly exhausted
+            description: API rate limit is critically low
+
+        - alert: HighErrorRate
+          expr: rate(calendar_errors_total[5m]) / rate(calendar_api_duration_seconds_count[5m]) > 0.05
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: High error rate
+            description: Calendar API error rate is above 5%

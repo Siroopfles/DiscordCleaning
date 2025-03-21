@@ -1,12 +1,13 @@
 import winston from 'winston';
 import 'winston-daily-rotate-file';
 
-// Custom levels voor onze applicatie
+// Define custom levels
 const levels = {
   error: 0,
   warn: 1,
   info: 2,
-  debug: 3,
+  http: 3,
+  debug: 4,
 };
 
 const logFormat = winston.format.combine(
@@ -14,7 +15,6 @@ const logFormat = winston.format.combine(
   winston.format.json()
 );
 
-// Configureer de logger met file rotation
 const logger = winston.createLogger({
   levels,
   format: logFormat,
@@ -29,16 +29,43 @@ const logger = winston.createLogger({
     // Roterende log files
     new winston.transports.DailyRotateFile({
       filename: 'logs/error-%DATE%.log',
-      datePattern: 'YYYY-MM-DD',
       level: 'error',
-      maxFiles: '14d',
+      datePattern: 'YYYY-MM-DD',
+      maxFiles: '30d'
     }),
     new winston.transports.DailyRotateFile({
       filename: 'logs/combined-%DATE%.log',
       datePattern: 'YYYY-MM-DD',
-      maxFiles: '14d',
-    }),
-  ],
+      maxFiles: '30d'
+    })
+  ]
 });
+
+// Add request context for structured logging
+export const addRequestContext = (req: any) => {
+  return {
+    method: req.method,
+    url: req.url,
+    userAgent: req.get('user-agent'),
+    ip: req.ip,
+    correlationId: req.headers['x-correlation-id']
+  };
+};
+
+// Add webhook context for structured logging
+export const addWebhookContext = (data: {
+  webhookId: string;
+  eventType: string;
+  deliveryId?: string;
+  status?: string;
+  retryCount?: number;
+  duration?: number;
+}) => {
+  return {
+    ...data,
+    service: 'webhook',
+    timestamp: new Date().toISOString()
+  };
+};
 
 export default logger;

@@ -1,7 +1,0 @@
-{
-  "dependencies": {
-    "@types/react-big-calendar": "^1.16.1",
-    "date-fns": "^4.1.0",
-    "react-big-calendar": "^1.18.0"
-  }
-}
