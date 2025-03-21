@@ -31,7 +31,10 @@
 - [DONE] Webhook-ondersteuning
 
 ## Fase 4: Afwerking (Maanden 10-12)
-- [PLAN] Discord uit backend halen en verplaatsen naar aparte package
+- [DONE] Discord uit backend halen en verplaatsen naar aparte package
+  * Core functionaliteit gemigreerd
+  * Alle commands overgezet (task, category, currency)
+  * Currency systeem verbeterd met monitoring en rate limiting
 - [PLAN] Backend-codebase controleren en ontbrekende bestanden herstellen
 - [PLAN] Frontend-codebase controleren en ontbrekende bestanden herstellen
 - [PLAN] UI/UX optimalisatie

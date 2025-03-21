@@ -1,2 +1,4 @@
 node_modules
 .git/
+packages/discord/dist/
+backend/output.txt

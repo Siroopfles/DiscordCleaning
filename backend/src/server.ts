@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import { app, httpServer, wsService } from './app';
+import { app, httpServer, wsService, discordClient } from './app';
 
 const PORT = process.env.PORT || 3001;
 
@@ -28,12 +28,23 @@ function gracefulShutdown() {
   console.log('🔄 Initiating graceful shutdown...');
   
   // Create a shutdown promise
-  const shutdown = new Promise<void>((resolve) => {
-    server.close(() => {
-      console.log('👋 HTTP server closed');
+  const shutdown = Promise.all([
+    // Sluit HTTP server
+    new Promise<void>((resolve) => {
+      server.close(() => {
+        console.log('👋 HTTP server closed');
+        resolve();
+      });
+    }),
+    // Sluit Discord client
+    new Promise<void>((resolve) => {
+      if (discordClient) {
+        discordClient.destroy();
+        console.log('🤖 Discord client destroyed');
+      }
       resolve();
-    });
-  });
+    })
+  ]);
 
   // Add timeout to force exit if graceful shutdown takes too long
   const forceExit = new Promise<void>((resolve) => {

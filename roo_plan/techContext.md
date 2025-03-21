@@ -25,8 +25,14 @@
 - RabbitMQ voor message queuing
 
 ### Discord Integratie
-- Discord.js voor bot-ontwikkeling
-- Discord API integratie
+- @newboom/discord package voor Discord functionaliteit
+  * Discord.js v14.18.0 voor bot-ontwikkeling
+  * Geïsoleerde Discord service architectuur
+  * Type-safe integratie met backend
+  * Command systeem met permissie beheer
+  * Currency management met rate limiting
+  * Real-time monitoring en statistieken
+  * Transactie logging en auditing
 
 ### Testing & QA
 - Jest voor unit tests

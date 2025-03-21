@@ -6,6 +6,9 @@ import { createWebSocketService } from './services/WebSocketService';
 import { websocketConfig } from './config/websocket';
 import webhookRoutes from './routes/webhook.routes';
 import { initWebhookMetrics } from './config/webhookMetrics';
+import { createDiscordClient, connectDiscordClient } from '@newboom/discord';
+import { discordConfig } from './config/discord';
+import DiscordService from './services/discord.service';
 
 // Initialize express app
 const app: Express = express();
@@ -20,6 +23,15 @@ app.use(json());
 
 // Initialize WebSocket service
 const wsService = createWebSocketService(httpServer);
+
+// Initialize Discord client
+const discordClient = createDiscordClient(discordConfig);
+const discordService = new DiscordService(discordClient);
+
+// Connect Discord client
+connectDiscordClient(discordClient).catch((error) => {
+  console.error('Failed to connect Discord client:', error);
+});
 
 // Initialize webhook metrics
 initWebhookMetrics();
@@ -48,4 +60,4 @@ app.use((err: Error, req: express.Request, res: express.Response, next: express.
 });
 
 // Export for use in server.ts
-export { app, httpServer, wsService };
+export { app, httpServer, wsService, discordClient, discordService };

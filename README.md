@@ -1,4 +1,4 @@
-# Boomerang Memory Bank System
+# Boomerang Workflows Section - Boomerang Memory Bank
 
 ## Main Workflow
 
@@ -36,18 +36,16 @@ flowchart TD
     D -->|TOOL: attempt_completion| B
     
     %% Update phase
-    B -->|"All subtasks done or 'update MB'<br>TOOL: switch_mode"| MBU["MB Update<br>Document updates"]
-    MBU -->|TOOL: attempt_completion| End([Task Complete])
-    End -.->|"TOOL: switch_mode"| BS
+    B -->|"All subtasks done or 'update MB'<br>TOOL: ask_followup_question and then switch_mode"| MBU["Boomerang Memory Bank Update<br>Document updates"]
+    MBU --->|"TOOL: switch_mode and then attempt_completion"| B
     
     %% Universal requirements
     UR["CRITICAL RULES:
     - If files missing, stop and ask user
     - All workflow rules in flowcharts
     - Docs in roo_plan/ folder
-    - USE APPLY_DIFF NOT WRITE_TO_FILE WHEN EDITING FILES.
-    - WRITE_TO_FILE IS ONLY FOR NEW FILES OR REPLACING THE ENTIRE FILE.
-    -IT IS ENVIRONMENTALLY UNFRIENDLY TO USE IT OTHERWISE."]
+    - USE `APPLY_DIFF`, NOT `WRITE_TO_FILE`, WHEN EDITING FILES.  
+    - ONLY USE `WRITE_TO_FILE` FOR NEW FILES—ANY OTHER USE IS A RECKLESS WASTE OF RESOURCES AND DAMAGES THE ENVIRONMENT."]
 ```
 
 ## Document Structure & Review Rules
@@ -68,6 +66,10 @@ graph TD
   PR["progress.md<br>(Project Status)"] --> AC
   AC["activeContext.md<br>(Current Focus)"]
   
+  %% Connect document hierarchy to update rules and processes
+  PB --> UpdateRules
+  PB --> ReviewPatterns
+  
   %% Document update and review rules
   UpdateRules["Document Update Rules:
   • productContext: Only when core purpose changes (explicit approval)
@@ -76,9 +78,37 @@ graph TD
   • progress: Status changes (maintain Status Legend)
   • activeContext: Focus changes (track dependencies)"]
   
+  UpdateRules --> UpdateProcess
+  
   ReviewPatterns["Review Patterns:
   • Boomerang Startup: ALL documents sequentially (1→5)
   • Subtask Startup: ONLY content relevant to subtask"]
+  
+  %% Document update process
+  UpdateProcess["Document Update Process:
+  1. Review current content
+  2. Validate against document rules
+  3. Get explicit user approval
+  4. Use apply_diff for precise updates
+  5. Verify document integrity"]
+  
+  UpdateProcess --> CriticalRules
+  
+  %% Critical document update rules
+  CriticalRules["CRITICAL DOCUMENT UPDATE RULES:
+  - All Boomerang Memory Bank documents must remain in roo_plan/ folder
+  - Document updates require appropriate level approvals
+  - Progress.md must maintain its Status Legend
+  - Documents must use simple structure without protocol sections
+  - apply_diff must be used for all document updates"]
+  
+  %% Connect review patterns to documents
+  ReviewPatterns --> PB
+  ReviewPatterns --> PC
+  ReviewPatterns --> SP
+  ReviewPatterns --> TC
+  ReviewPatterns --> PR
+  ReviewPatterns --> AC
 ```
 
 ## Workflow Sequence
@@ -124,7 +154,7 @@ sequenceDiagram
         alt Implementation Task
             Note right of Boomerang: Classified as Implementation
             Boomerang->>SubStartup: TOOL: new_task (implementation subtask)
-            SubStartup->>Code: TOOL: switch_mode (focused review)
+            SubStartup->>Code: TOOL: switch_mode (after focused review)
             
             opt Issues Encountered
                 Code->>Debug: TOOL: switch_mode (debugging needed)
@@ -141,13 +171,14 @@ sequenceDiagram
     
     Note over User,Update: UPDATE & CYCLE PHASE
     
-    Note right of Boomerang: Use switch_mode to transition to MB Update
-    Boomerang->>Update: TOOL: switch_mode (all subtasks complete)
-    Update->>User: TOOL: attempt_completion (task complete)
+    Note right of Boomerang: Use ask_followup_question and then switch_mode to transition to Boomerang Memory Bank Update
+    Boomerang->>Update: TOOL: ask_followup_question and then switch_mode (all subtasks complete)
+    Update->>Boomerang: TOOL: switch_mode and then attempt_completion (document updates)
     
-    Note over User,Update: Optional: Continue with new task using switch_mode
-    User->>Startup: Start New Task
-    Startup->>Boomerang: TOOL: switch_mode (complete context)
+    Note over User,Update: Task completion and new task cycle
+    Boomerang->>User: Task complete
+    User->>Startup: Start New Task (optional)
+    Startup->>Boomerang: TOOL: switch_mode (after full document review)
     
     Note over User,Update: KEY MODE TRANSITIONS:
     Note over User,Update: • Code → Debug: When errors encountered
@@ -155,39 +186,5 @@ sequenceDiagram
     Note over User,Update: • Task Completion → New Task: Optional continuation
 ```
 
-## System Maintenance & Update Rules
-
-```mermaid
-flowchart TD
-    %% System maintenance with clear paths
-    SystemUpdate([System Update Needed]) --> UpdateType{What needs updating?}
-    
-    %% Three main update paths
-    UpdateType -->|"Mode Behavior Changes"| ModeBehavior["Update .roomodes.json<br>Mode definitions & capabilities"]
-    UpdateType -->|"Workflow Rule Changes"| WorkflowRules["Update .clinerules.md<br>Flowcharts & diagrams"]
-    UpdateType -->|"Document Content Changes"| DocContent["Use MB Update Mode<br>Content updates"]
-    
-    %% Update process details
-    DocContent --> UpdateProcess["Document Update Process:
-    1. Review current content
-    2. Validate against document rules
-    3. Get explicit user approval
-    4. Use apply_diff for precise updates
-    5. Verify document integrity"]
-    
-    %% System validation
-    ModeBehavior & WorkflowRules & UpdateProcess --> Consistency["System Consistency Check<br>Verify workflow alignments"]
-    
-    %% Critical system rules
-    CriticalRules["CRITICAL SYSTEM RULES:
-    
-    • All workflow rules must be defined in flowcharts, not mode instructions
-    • All Boomerang Memory Bank documents must remain in roo_plan/ folder
-    • Document updates require appropriate level approvals
-    • Progress.md must maintain its Status Legend
-    • Documents must use simple structure without protocol sections
-    • All modes must reference flowcharts for workflow guidance
-    • apply_diff must be used for all document updates"]
-```
 
 The flowcharts above provide the complete workflow rules for the Boomerang Memory Bank system. Any changes to the workflow should be made by updating these flowcharts.

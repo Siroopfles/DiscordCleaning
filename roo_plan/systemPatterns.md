@@ -7,7 +7,14 @@
 ### Microservices Architectuur
 - Frontend Service (Next.js)
 - Backend API Service (Express.js + TypeScript)
-- Discord Bot Service (Discord.js)
+- @newboom/discord Package (Discord.js)
+  * Discord Bot Service met command handlers
+  * Notificatie Integratie
+  * Webhook Handling
+  * Currency Management System
+    - Rate Limiting Service
+    - Transaction Monitoring
+    - Permission Management
 - Notificatie Service
 - Webhook Service
 
@@ -31,8 +38,10 @@
 - Observer pattern voor notificaties
 - Factory pattern voor taakcreatie
 - Strategy pattern voor notificatiekanalen
+- Rate Limiter pattern voor currency operaties
 - Aggregator pattern voor analytics data
 - Chain of Responsibility voor data transformaties
+- Command pattern voor Discord interacties
 
 ## Codeerstandaarden
 - TypeScript voor type-veiligheid
