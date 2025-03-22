@@ -1,22 +1,26 @@
 {
   "compilerOptions": {
-    "target": "es2017",
-    "module": "commonjs",
-    "lib": ["es2017", "esnext.asynciterable"],
+    "target": "ES2020",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "declaration": true,
-    "declarationMap": true,
-    "sourceMap": true,
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
     "outDir": "./dist",
     "rootDir": "./src",
-    "strict": true,
-    "moduleResolution": "node",
-    "baseUrl": "./src",
-    "esModuleInterop": true,
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "types": ["node", "jest"],
+    "paths": {
+      "@/*": ["./src/*"]
+    }
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist", "**/__tests__/*"]
+  "include": [
+    "src/**/*",
+    "src/**/__tests__/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
 }

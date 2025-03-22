@@ -1,6 +1,4 @@
 import { Client } from 'discord.js';
-import { ApiService } from './api';
-import { MonitoringService, RateLimiterService } from '../services';
 
 export interface DiscordConfig {
   token: string;
@@ -16,9 +14,6 @@ export interface DiscordClientOptions {
 
 export interface DiscordServices {
   logger?: Logger;
-  api?: ApiService;
-  rateLimiter?: RateLimiterService;
-  monitoring?: MonitoringService;
 }
 
 export interface Logger {
@@ -33,6 +28,7 @@ export interface DiscordClient extends Client {
   services: DiscordServices;
 }
 
-export * from './notification';
-export * from './api';
-export * from './monitoring';
+/**
+ * Constructor type voor classes
+ */
+export type Constructor<T = any> = new (...args: any[]) => T;

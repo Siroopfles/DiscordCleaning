@@ -41,32 +41,95 @@
     - Prometheus metrics endpoints toegevoegd
     - Custom monitoring events gedefinieerd
     - Performance tracking geïntegreerd
-  * [PLAN] Codebase Modularisatie
+  * [WIP] Codebase Modularisatie
+    - Implementatieplan gedocumenteerd in discord-modularization.md
     - Services Module Herstructurering
-      * Core Services submodule opzetten
-      * Integration Services submodule opzetten
-      * Management Services submodule opzetten
-    - Types Module Herstructurering
-      * Core Types submodule opzetten
-      * Service Types submodule opzetten
-      * Integration Types submodule opzetten
-    - Utils Module Herstructurering
-      * Permissions submodule opzetten
-      * Validation submodule opzetten
-      * Helpers submodule opzetten
-    - Commands Module Herstructurering
-      * Category Commands submodule opzetten
-      * Currency Commands submodule opzetten
-      * Task Commands submodule opzetten
-    - Events Module Herstructurering
-      * Discord Events submodule opzetten
-      * System Events submodule opzetten
-    - Models Module Herstructurering
-      * Data Models submodule opzetten
-      * Schema Definitions submodule opzetten
-    - Config Module Herstructurering
-      * Environment Config submodule opzetten
-      * Service Config submodule opzetten
+      * [DONE] Core Services Module (Fase 1)
+        - Base Service Framework
+          * [DONE] Service lifecycle hooks
+          * [DONE] Factory pattern implementatie
+          * [DONE] Dependency management
+          * [DONE] Type-safe constructie
+        - Monitoring System
+          * [DONE] Event buffering en batching
+          * [DONE] Metrics aggregatie
+          * [DONE] Trace context propagatie
+        - Rate Limiting
+          * [DONE] Token bucket algoritme
+          * [DONE] Multi-tenant policies
+          * [DONE] Dynamic rate aanpassing
+      * [DONE] Integration Services Module (Fase 2)
+        - API Module
+          * [DONE] Request/response handlers
+          * [DONE] Error handling verbetering
+          * [DONE] Caching mechanisme
+        - Notification Module
+          * [PLAN] Provider/channel handlers
+          * [PLAN] Message templating
+          * [PLAN] Delivery garanties
+        - Queue Module
+          * [PLAN] RabbitMQ strategy
+          * [PLAN] Consumer/publisher handlers
+          * [PLAN] Error recovery
+      * [DONE] Management Services Module (Fase 3)
+        - Logging System
+          * [DONE] Transport abstracties
+          * [DONE] Format templates
+          * [DONE] Log levels configuratie
+          * [DONE] Context propagatie
+        - Metrics Pipeline
+          * [DONE] Collector implementatie
+          * [DONE] Aggregatie logica
+          * [DONE] Export formattering
+          * [DONE] Query optimalisatie
+        - Config Management
+          * [DONE] Provider abstracties
+            - IConfigProvider interface
+            - IConfigService interface
+            - IConfigValidator interface
+            - Base types en enums
+          * [DONE] Schema validatie
+            - JSON Schema validatie geïmplementeerd
+            - Schema compilation caching
+            - Custom keywords support
+            - Type inference systeem
+          * [DONE] Update propagatie
+            - Change detection geïmplementeerd
+            - Event-based updates werkend
+            - Live reload functionaliteit
+            - Transaction support
+          * [DONE] Secret encryptie
+            - Secure config storage
+            - Encrypted value handling
+            - Access control systeem
+            - Security audit logging
+          * [DONE] Concrete implementaties
+            - FileConfigProvider (JSON/YAML)
+            - EnvironmentConfigProvider
+            - MemoryConfigProvider
+            - ConfigServiceFactory
+      * [PLAN] Controlleren of alle Services Modules geherstructureerd zijn(Fase 4)
+    - [PLAN] Types Module Herstructurering
+      * Core Types submodule
+      * Service Types submodule
+      * Integration Types submodule
+    - [PLAN] Utils Module Herstructurering
+      * Permissions submodule
+      * Validation submodule
+      * Helpers submodule
+    - [PLAN] Commands Module Herstructurering
+      * Category Commands submodule
+      * Currency Commands submodule
+      * Task Commands submodule
+    - [PLAN] Events Module Herstructurering
+      * Discord Events submodule
+      * System Events submodule
+    - [PLAN] Models Module Herstructurering
+      * Data Models submodule
+      * Schema Definitions submodule
+    - [PLAN] Config Module Herstructurering
+      * Environment Config submodule
+      * Service Config submodule
   * [PLAN] RabbitMQ Integratie
     - Message queue service abstractie
     - Event publishers voor Discord events
